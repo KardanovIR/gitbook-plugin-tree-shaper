@@ -140,6 +140,42 @@ jQuery(document).ready(function () {
     
     buildCurrentTreeState();
     
+    function activateLinks() {
+        var
+            $links = $('.book-summary .chapters-wrapper a');
+
+        $links.each(function() {
+            var
+                $this = $(this),
+                link = getAbsoluteUrl($this).replace(/^([^:]+:\/\/)?[^\/?]+/, ''),
+                path = location.pathname;
+
+            if (link == path) {
+                $this.addClass('expanded').removeClass('collapsed');
+                $this.next().show();
+                expandLinksParents($this);
+            }
+        });
+    }
+    function expandLinksParents($link) {
+        var
+            $parents = $link.parents('.chapters-wrapper,.articles');
+
+        $parents.each(function() {
+            var
+                $this = $(this),
+                $next = $this.next();
+
+            $this.prev().addClass('expanded').removeClass('collapsed');
+            $this.show();
+
+            if ($next.hasClass('articles')) {
+                $next.show();
+            }
+        });
+    }
+    activateLinks();
+    
     
     /**/
     var addBranding = function () {
